@@ -22,7 +22,8 @@ import com.example.r504tl1973004_jsontypicodeusers.R
 
 @Composable
 fun UsersScreenRoot(modifier: Modifier = Modifier) {
-    val vm = viewModel<UsersScreenViewModel>()
+    // Dagger Hilt
+    val vm = viewModel<UsersScreenViewModel>(factory = UsersScreenViewModel.createFactory())
     val state by vm.state.collectAsStateWithLifecycle()
 
     UsersScreen(state = state)
