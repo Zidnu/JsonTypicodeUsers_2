@@ -39,6 +39,8 @@ android {
 
 dependencies {
 
+    implementation(libs.kotlinx.coroutines.test)
+
 
 // Retrofit
     implementation(libs.retrofit)
