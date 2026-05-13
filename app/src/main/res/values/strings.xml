@@ -1,4 +1,9 @@
 <resources>
     <string name="app_name">R504TL1973004_JsonTypicodeUsers</string>
     <string name="users">Users</string>
+    <string name="add_user">Add user</string>
+    <string name="add_new_user">Add New User</string>
+    <string name="email_address">Email Address</string>
+    <string name="example_domain_com">example@domain.com</string>
+    <string name="create_user">Create User</string>
 </resources>
