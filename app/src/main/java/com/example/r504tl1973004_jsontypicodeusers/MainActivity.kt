@@ -4,15 +4,35 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Home
+import androidx.compose.material3.DrawerValue
+import androidx.compose.material3.Icon
+
+import androidx.compose.material3.ModalDrawerSheet
+import androidx.compose.material3.ModalNavigationDrawer
+import androidx.compose.material3.NavigationDrawerItem
+import androidx.compose.material3.NavigationDrawerItemDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
 import com.example.r504tl1973004_jsontypicodeusers.presentation.UsersScreenRoot
 import com.example.r504tl1973004_jsontypicodeusers.ui.theme.R504TL1973004_JsonTypicodeUsersTheme
+
+
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -20,7 +40,38 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             R504TL1973004_JsonTypicodeUsersTheme {
-                UsersScreenRoot()
+
+
+                val drawerState = rememberDrawerState(initialValue = DrawerValue.Open)
+                val navController = rememberNavController()
+
+
+                ModalNavigationDrawer(
+                    // elementeillä on oletuspadding
+
+                    // tämä on drawerin sisältö
+                    drawerContent = {
+                        ModalDrawerSheet {
+                            Spacer(modifier = Modifier.height(16.dp))
+                            NavigationDrawerItem(
+                                label = {
+                                    Text(stringResource(R.string.users))
+                                },
+                                icon = {
+                                    Icon(Icons.Default.Home, contentDescription = R.string.users)
+                                },
+                                onClick = {},
+                                selected = true
+                            )
+                        }
+                    }, drawerState = drawerState
+                ) {
+                    NavHost(navController=navController, startDestination= "users") {
+                        composable("users") {
+                            UsersScreenRoot()
+                        }
+                    }
+                }
             }
         }
     }

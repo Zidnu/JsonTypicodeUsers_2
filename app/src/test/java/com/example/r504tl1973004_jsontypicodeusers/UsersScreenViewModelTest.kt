@@ -48,7 +48,7 @@ class UsersScreenViewModelTest {
         // ACT
         vm.getUsers()
 
-        // Assert asdasd
+        // Assert
         assertEquals("Joku tahallaan lavastettu virhe", vm.state.value.error)
     }
 }
