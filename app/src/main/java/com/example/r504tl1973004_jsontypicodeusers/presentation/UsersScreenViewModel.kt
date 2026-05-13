@@ -39,6 +39,7 @@ class UsersScreenViewModel(private val api: JsonTypiCodeAPI) : ViewModel() {
                     currentState.copy(loading = true)
                 }
 
+                // api -> jsonTypicodeService
                 val users = api.getAllUsers()
                 _state.update { currentState -> currentState.copy(items = users) }
 
