@@ -23,27 +23,37 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.r504tl1973004_jsontypicodeusers.R
 
 @Composable
 fun AddUserScreenRoot(modifier: Modifier = Modifier, onBackClick: () -> Unit) {
     val vm = viewModel<UsersScreenViewModel>(factory = UsersScreenViewModel.createFactory())
+    val state by vm.addUserState.collectAsStateWithLifecycle()
 
-    AddUserScreen(onBackClick = onBackClick)
+    AddUserScreen(onBackClick = onBackClick, state = state, onUpdateEmail = { newName ->
+        vm.updateEmail(newName)
+    }, onCreateUser = {
+        vm.createUser()
+    })
+
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddUserScreen(
-    onBackClick: () -> Unit
+    onBackClick: () -> Unit,
+    state: AddUserState,
+    onUpdateEmail : (String) -> Unit,
+    onCreateUser : () -> Unit
 ) {
     Scaffold(
         topBar = {
@@ -53,7 +63,7 @@ fun AddUserScreen(
                     IconButton(onClick = onBackClick) {
                         Icon(
                             Icons.AutoMirrored.Filled.ArrowBack,
-                            contentDescription = "Back"
+                            contentDescription = stringResource(R.string.back)
                         )
                     }
                 }
@@ -71,9 +81,11 @@ fun AddUserScreen(
 
             OutlinedTextField(
                 // tämä data tulee viewmodelista
-                value = "",
+                value = state.email,
                 // tähän lisätään lambda, joka tulee olemaan viewmodelissa
-                onValueChange = { },
+                onValueChange = {
+                    onUpdateEmail(it)
+                },
                 label = { Text(stringResource(R.string.email_address)) },
                 placeholder = { Text(stringResource(R.string.example_domain_com)) },
                 modifier = Modifier.fillMaxWidth(),
@@ -90,7 +102,9 @@ fun AddUserScreen(
 
             Button(
                 // tämä tulee viewmodelista
-                onClick = { },
+                onClick = {
+                    onCreateUser()
+                },
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(56.dp),
@@ -102,10 +116,4 @@ fun AddUserScreen(
             }
         }
     }
-}
-
-@Preview(showBackground = true)
-@Composable
-private fun AddUserScreenPreview() {
-    AddUserScreen(onBackClick = {})
 }

@@ -1,5 +1,6 @@
 package com.example.r504tl1973004_jsontypicodeusers.presentation
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
@@ -12,6 +13,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+
 
 class UsersScreenViewModel(private val api: JsonTypiCodeAPI) : ViewModel() {
 
@@ -28,8 +30,32 @@ class UsersScreenViewModel(private val api: JsonTypiCodeAPI) : ViewModel() {
     private val _state = MutableStateFlow(UsersState())
     val state = _state.asStateFlow()
 
+    private val _addUserState = MutableStateFlow(AddUserState())
+    val addUserState = _addUserState.asStateFlow()
+
     init {
+        Log.d("elisakikkailee", "${hashCode()}")
         getUsers()
+    }
+
+    fun createUser() {
+        viewModelScope.launch {
+            try {
+                val newUser = api.createUser(CreateUserReqDto(email = addUserState.value.email))
+                // HUOM tämä ei toimi niin kuin voisi luulla
+                _state.update { currentState ->
+                    currentState.copy(items=state.value.items + newUser)
+                }
+            } catch (e: Exception) {
+            } finally {
+
+
+            }
+        }
+    }
+
+    fun updateEmail(newEmail: String) {
+        _addUserState.update { currentState -> currentState.copy(email = newEmail) }
     }
 
     fun getUsers() {
