@@ -4,29 +4,29 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
+import com.example.r504tl1973004_jsontypicodeusers.domain.CreateUserReqDto
 import com.example.r504tl1973004_jsontypicodeusers.domain.JsonTypiCodeAPI
 import com.example.r504tl1973004_jsontypicodeusers.domain.jsonTypicodeService
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-
+import retrofit2.Retrofit
 
 class UsersScreenViewModel(private val api: JsonTypiCodeAPI) : ViewModel() {
 
     companion object {
-        fun createFactory() : ViewModelProvider.Factory = viewModelFactory {
+        fun createFactory(): ViewModelProvider.Factory = viewModelFactory {
             initializer {
 
                 UsersScreenViewModel(jsonTypicodeService)
             }
         }
+
     }
-    // coin
-    //
+
     private val _state = MutableStateFlow(UsersState())
     val state = _state.asStateFlow()
 
@@ -34,7 +34,7 @@ class UsersScreenViewModel(private val api: JsonTypiCodeAPI) : ViewModel() {
     val addUserState = _addUserState.asStateFlow()
 
     init {
-        Log.d("elisakikkailee", "${hashCode()}")
+        Log.d("juhanikikkailee::viewmodel", "${hashCode()}")
         getUsers()
     }
 
@@ -42,14 +42,12 @@ class UsersScreenViewModel(private val api: JsonTypiCodeAPI) : ViewModel() {
         viewModelScope.launch {
             try {
                 val newUser = api.createUser(CreateUserReqDto(email = addUserState.value.email))
-                // HUOM tämä ei toimi niin kuin voisi luulla
+                // HUOM tämä ei tomi niin kuin voisi luulla
                 _state.update { currentState ->
                     currentState.copy(items=state.value.items + newUser)
                 }
             } catch (e: Exception) {
             } finally {
-
-
             }
         }
     }
@@ -63,9 +61,9 @@ class UsersScreenViewModel(private val api: JsonTypiCodeAPI) : ViewModel() {
             try {
                 _state.update { currentState ->
                     currentState.copy(loading = true)
+
                 }
 
-                // api -> jsonTypicodeService
                 val users = api.getAllUsers()
                 _state.update { currentState -> currentState.copy(items = users) }
 
@@ -76,8 +74,11 @@ class UsersScreenViewModel(private val api: JsonTypiCodeAPI) : ViewModel() {
                 _state.update { currentState ->
                     currentState.copy(loading = false)
                 }
+
+
             }
         }
     }
+
 
 }

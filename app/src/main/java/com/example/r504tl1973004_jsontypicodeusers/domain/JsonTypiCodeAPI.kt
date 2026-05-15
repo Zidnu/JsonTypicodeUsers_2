@@ -24,6 +24,7 @@ interface JsonTypiCodeAPI {
 
     @POST("users")
     suspend fun createUser(@Body reqData : CreateUserReqDto) : User
+    
 
 }
 

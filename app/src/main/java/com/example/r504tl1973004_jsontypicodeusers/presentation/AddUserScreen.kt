@@ -35,8 +35,12 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.r504tl1973004_jsontypicodeusers.R
 
 @Composable
-fun AddUserScreenRoot(modifier: Modifier = Modifier, onBackClick: () -> Unit) {
-    val vm = viewModel<UsersScreenViewModel>(factory = UsersScreenViewModel.createFactory())
+fun AddUserScreenRoot(
+    modifier: Modifier = Modifier,
+    onBackClick: () -> Unit,
+    vm: UsersScreenViewModel
+) {
+
     val state by vm.addUserState.collectAsStateWithLifecycle()
 
     AddUserScreen(onBackClick = onBackClick, state = state, onUpdateEmail = { newName ->
@@ -52,8 +56,8 @@ fun AddUserScreenRoot(modifier: Modifier = Modifier, onBackClick: () -> Unit) {
 fun AddUserScreen(
     onBackClick: () -> Unit,
     state: AddUserState,
-    onUpdateEmail : (String) -> Unit,
-    onCreateUser : () -> Unit
+    onUpdateEmail: (String) -> Unit,
+    onCreateUser: () -> Unit
 ) {
     Scaffold(
         topBar = {
